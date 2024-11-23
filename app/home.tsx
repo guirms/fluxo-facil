@@ -48,7 +48,6 @@ const userData = {
           spent: 105.5,
         },
       ],
-      // Adicionei dias do mês para o gráfico
       chartData: [
         { day: "1", expense: 50 },
         { day: "5", expense: 100 },
@@ -252,10 +251,10 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Despesas</Text>
           <LineChart
             data={{
-              labels: currentMonth.chartData.map((data) => data.day), // Usando dias do mês como rótulos
+              labels: currentMonth.chartData.map((data) => data.day),
               datasets: [
                 {
-                  data: currentMonth.chartData.map((data) => data.expense), // Valores das despesas
+                  data: currentMonth.chartData.map((data) => data.expense),
                   color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
                 },
               ],
@@ -264,14 +263,21 @@ export default function HomeScreen() {
             height={200}
             yAxisLabel="R$"
             chartConfig={{
-              backgroundColor: "#25292e",
-              backgroundGradientFrom: "#25292e",
-              backgroundGradientTo: "#1c1f26",
+              backgroundGradientFrom: "#253031",
+              backgroundGradientTo: "#253031",
               decimalPlaces: 2,
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              propsForDots: {
+                strokeWidth: 0,
+              },
+              propsForBackgroundLines: {
+                strokeWidth: 0,
+              },
             }}
-            style={{ marginVertical: 10, borderRadius: 16 }}
+            style={{ 
+              marginRight: 10
+              }}
           />
         </View>
       </View>
@@ -430,8 +436,9 @@ const styles = StyleSheet.create({
   planningText: { color: "#aaa", fontSize: 14 },
   chartSection: {
     marginVertical: 20,
+    padding: 10,
     backgroundColor: "#253031",
-    borderRadius: 10
+    borderRadius: 10,
   },
   sectionTitle: {
     color: "#fff",
