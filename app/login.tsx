@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image, Alert } fro
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../infra/firebase';
-import PlaceholderImage from '@/assets/images/logo.png';
+import logoImage from '@/assets/images/logo.png';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -23,7 +23,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Image source={PlaceholderImage} style={styles.logo} />
+      <Image source={logoImage} style={styles.logo} />
 
       <Text style={styles.title}>Login</Text>
 

@@ -9,8 +9,8 @@ import {
   Dimensions,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
-import { MaterialIcons } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import personImage from '@/assets/images/person.png';
 
 const userData = {
   name: "João Vitor",
@@ -76,22 +76,13 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Image
-            source={{ uri: "https://via.placeholder.com/50" }}
+            source={personImage}
             style={styles.avatar}
           />
           <Text style={styles.userName}>{userData.name}</Text>
-        </View>
-        <View style={styles.actions}>
-          <TouchableOpacity>
-            <Text style={styles.icon}>👁</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.icon}>⚙️</Text>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.balanceSection}>
@@ -241,11 +232,21 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#1c1f26" },
-  header: { backgroundColor: "#1c1f26", padding: 10 },
+  header: { 
+    backgroundColor: "#2E3C3D", 
+    padding: 10,
+    marginBottom: 20,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5
+  },
   userInfo: { flexDirection: "row", alignItems: "center" },
   avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 10 },
   userName: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-  actions: { flexDirection: "row", position: "absolute", right: 10, top: 10 },
   icon: { color: "#fff", fontSize: 20, marginLeft: 15 },
   balanceSection: { alignItems: "center" },
   monthSelector: {
@@ -272,13 +273,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    gap: 10
   },
   card: {
     flex: 1,
-    backgroundColor: "#25292e",
+    backgroundColor: "#253031",
     borderRadius: 10,
     padding: 10,
-    marginHorizontal: 5,
   },
   cardHeader: {
     flexDirection: "row",
@@ -292,12 +293,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   cardItem: {
-    flexDirection: "row", // Coloca o valor e a descrição na mesma linha
-    justifyContent: "space-between", // Espaço entre o valor e a descrição
-    alignItems: "center", // Alinha verticalmente os itens
-    color: "#aaa", // Cor padrão para o texto
-    fontSize: 14, // Tamanho da fonte
-    marginBottom: 2, // Espaço entre os itens
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    color: "#aaa",
+    fontSize: 14,
+    marginBottom: 2,
   },
   cardTitleIncome: {
     color: "green",
