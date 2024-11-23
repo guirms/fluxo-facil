@@ -12,7 +12,7 @@ import { LineChart } from "react-native-chart-kit";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import personImage from "@/assets/images/person.png";
 
-const userData = {
+const financeData: FinanceData = {
   name: "João Vitor",
   months: [
     {
@@ -98,7 +98,7 @@ const userData = {
         { day: "15", expense: 240 },
         { day: "20", expense: 300 },
         { day: "25", expense: 360 },
-        { day: "30", expense: 420 },
+        { day: "30", expense: 420 }
       ],
     },
   ],
@@ -106,7 +106,7 @@ const userData = {
 
 export default function HomeScreen() {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
-  const currentMonth = userData.months[currentMonthIndex];
+  const currentMonth = financeData.months[currentMonthIndex];
   const screenWidth = Dimensions.get("window").width;
 
   const handleMonthChange = (direction: "prev" | "next") => {
@@ -114,7 +114,7 @@ export default function HomeScreen() {
       setCurrentMonthIndex(currentMonthIndex - 1);
     } else if (
       direction === "next" &&
-      currentMonthIndex < userData.months.length - 1
+      currentMonthIndex < financeData.months.length - 1
     ) {
       setCurrentMonthIndex(currentMonthIndex + 1);
     }
@@ -127,7 +127,7 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Image source={personImage} style={styles.avatar} />
-          <Text style={styles.userName}>{userData.name}</Text>
+          <Text style={styles.userName}>{financeData.name}</Text>
         </View>
 
         <View style={styles.balanceSection}>
