@@ -15,9 +15,8 @@ export default function LoginScreen() {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       Alert.alert('Login Bem-sucedido', `Bem-vindo, ${user.email}!`);
-      router.push('/about'); // Redireciona para a próxima tela
+      router.push('/about');
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
       Alert.alert('Erro de Login', 'Usuário ou senha incorretos.');
     }
   };

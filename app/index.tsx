@@ -1,5 +1,3 @@
-import { Redirect } from 'expo-router';
+import LoginScreen from '../screens/login-screen';
 
-export default function Index() {
-  return <Redirect href="/login" />;
-}
+export default LoginScreen;
