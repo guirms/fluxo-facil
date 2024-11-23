@@ -6,13 +6,10 @@ const PlaceholderImage = require('@/assets/images/logo.png');
 export default function LoginScreen() {
   return (
     <View style={styles.container}>
-      {/* Logo */}
       <Image source={PlaceholderImage} style={styles.logo} />
 
-      {/* Texto principal */}
       <Text style={styles.mainText}>Seus gastos sob controle, sua vida mais tranquila.</Text>
 
-      {/* Campos de entrada */}
       <TextInput
         style={styles.input}
         placeholder="Username or Email"
@@ -25,12 +22,10 @@ export default function LoginScreen() {
         secureTextEntry
       />
 
-      {/* Botão de login */}
       <TouchableOpacity style={styles.loginButton}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
-      {/* Link para recuperação de senha */}
       <Text style={styles.forgotText}>
         Esqueceu seu usuário ou senha?{' '}
         <Text style={styles.clickableText}>Clique aqui!</Text>
@@ -48,8 +43,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-    width: 100, // Ajuste conforme necessário
-    height: 100, // Ajuste conforme necessário
+    width: 100,
+    height: 100,
     marginBottom: 20,
   },
   mainText: {
