@@ -1,21 +1,39 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { initializeApp } from '@firebase/app';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import PlaceholderImage from '@/assets/images/logo.png';
 
-export default function LoginScreen() {
+const firebaseConfig = {
+  apiKey: "AIzaSyBtauHnyAIhoDnD8wSpEdvVqTxYjSYIQaU",
+  authDomain: "fluxofacil-8ce9f.firebaseapp.com",
+  projectId: "fluxofacil-8ce9f",
+  storageBucket: "fluxofacil-8ce9f.appspot.com",
+  messagingSenderId: "104607617721",
+  appId: "1:104607617721:web:ada9a7c5656d80dc888168"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+export default function IndexScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = () => {
-    if (username === 'adm' && password === 'admpass') {
+  const handleLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, username, password);
+      const user = userCredential.user;
+      console.log('Usuário logado:', user);
+      Alert.alert('Login Bem-sucedido', `Bem-vindo, ${user.email}!`);
       router.push('/about');
-    } else {
-      Alert.alert(
-        'Erro de Login',
-        'Usuário ou senha incorretos!'
-      );
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+
+      console.error('Erro ao fazer login:', errorMessage);
+      Alert.alert('Erro de Login', 'Usuário ou senha incorretos!');
     }
   };
 
@@ -27,14 +45,14 @@ export default function LoginScreen() {
 
       <TextInput
         style={styles.input}
-        placeholder="Username or Email"
+        placeholder="Email"
         placeholderTextColor="#7f7f7f"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="Senha"
         placeholderTextColor="#7f7f7f"
         secureTextEntry
         value={password}
