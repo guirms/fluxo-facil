@@ -1,25 +1,9 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { initializeApp } from '@firebase/app';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBtauHnyAIhoDnD8wSpEdvVqTxYjSYIQaU",
-  authDomain: "fluxofacil-8ce9f.firebaseapp.com",
-  projectId: "fluxofacil-8ce9f",
-  storageBucket: "fluxofacil-8ce9f.appspot.com",
-  messagingSenderId: "104607617721",
-  appId: "1:104607617721:web:ada9a7c5656d80dc888168"
-};
-
-
-// Inicializa o Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// Certifique-se de que a imagem está localizada no caminho correto
-const PlaceholderImage = require('@/assets/images/logo.png');
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../infra/firebase';
+import PlaceholderImage from '@/assets/images/logo.png';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -40,7 +24,6 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Imagem do Logo */}
       <Image source={PlaceholderImage} style={styles.logo} />
 
       <Text style={styles.title}>Login</Text>
