@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  ScrollView,
   Dimensions,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
@@ -49,13 +48,13 @@ const financeData: FinanceData = {
         },
       ],
       chartData: [
-        { day: "1", expense: 50 },
-        { day: "5", expense: 100 },
-        { day: "10", expense: 150 },
-        { day: "15", expense: 200 },
-        { day: "20", expense: 250 },
-        { day: "25", expense: 300 },
-        { day: "30", expense: 400 },
+        { day: "01/06", expense: 60 },
+        { day: "05/06", expense: 120 },
+        { day: "10/06", expense: 180 },
+        { day: "15/06", expense: 240 },
+        { day: "20/06", expense: 300 },
+        { day: "25/06", expense: 360 },
+        { day: "30/05", expense: 420 },
       ],
     },
     {
@@ -92,13 +91,13 @@ const financeData: FinanceData = {
         },
       ],
       chartData: [
-        { day: "1", expense: 60 },
-        { day: "5", expense: 120 },
-        { day: "10", expense: 180 },
-        { day: "15", expense: 240 },
-        { day: "20", expense: 300 },
-        { day: "25", expense: 360 },
-        { day: "30", expense: 420 }
+        { day: "01/06", expense: 60 },
+        { day: "05/06", expense: 120 },
+        { day: "10/06", expense: 180 },
+        { day: "15/06", expense: 240 },
+        { day: "20/06", expense: 300 },
+        { day: "25/06", expense: 360 },
+        { day: "30/05", expense: 420 },
       ],
     },
   ],
@@ -259,9 +258,9 @@ export default function HomeScreen() {
                 },
               ],
             }}
-            width={screenWidth - 20}
+            width={screenWidth - 30}
             height={200}
-            yAxisLabel="R$"
+            yAxisLabel="R$ "
             chartConfig={{
               backgroundGradientFrom: "#253031",
               backgroundGradientTo: "#253031",
@@ -275,17 +274,12 @@ export default function HomeScreen() {
                 strokeWidth: 0,
               },
             }}
-            style={{ 
-              marginRight: 10
-              }}
           />
         </View>
-      </View>
+        </View>
 
       {/* Floating Button */}
-      <TouchableOpacity style={styles.floatingButton}>
-        <Text style={styles.buttonText}>+</Text>
-      </TouchableOpacity>
+      <TouchableOpacity style={styles.floatingButton}>+</TouchableOpacity>
     </View>
   );
 }
@@ -450,12 +444,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#1e90ff",
+    backgroundColor: "#27415699",
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-  },
-  buttonText: { color: "#fff", fontSize: 24, fontWeight: "bold" },
+    color: "white",
+    fontSize: 50,
+    fontWeight: "bold"
+  }
 });
