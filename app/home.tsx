@@ -6,11 +6,13 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import personImage from "@/assets/images/person.png";
 import financeData from "@/mock/mockData";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export default function HomeScreen() {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
@@ -67,7 +69,7 @@ export default function HomeScreen() {
 
       {/* Reserves and income */}
 
-      <View style={styles.scrollContainer}>
+      <ScrollView style={styles.scrollContainer}>
         <View style={styles.cardsContainer}>
           <View style={styles.card}>
             <View style={styles.cardHeader}>
@@ -173,7 +175,7 @@ export default function HomeScreen() {
             chartConfig={{
               backgroundGradientFrom: "#253031",
               backgroundGradientTo: "#253031",
-              decimalPlaces: 2,
+              decimalPlaces: 1,
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               propsForDots: {
@@ -185,10 +187,12 @@ export default function HomeScreen() {
             }}
           />
         </View>
-        </View>
+      </ScrollView>
 
       {/* Floating Button */}
-      <TouchableOpacity style={styles.floatingButton}>+</TouchableOpacity>
+      <TouchableOpacity style={styles.floatingButton}>
+        <FontAwesome6 name="plus" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -359,8 +363,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    color: "white",
-    fontSize: 50,
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 });
