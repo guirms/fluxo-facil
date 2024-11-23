@@ -1,9 +1,24 @@
-import React from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
-
-const PlaceholderImage = require('@/assets/images/logo.png');
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import PlaceholderImage from '@/assets/images/logo.png';
 
 export default function LoginScreen() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  const handleLogin = () => {
+    if (username === 'adm' && password === 'admpass') {
+      router.push('/about');
+    } else {
+      Alert.alert(
+        'Erro de Login',
+        'Usuário ou senha incorretos!'
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image source={PlaceholderImage} style={styles.logo} />
@@ -14,15 +29,19 @@ export default function LoginScreen() {
         style={styles.input}
         placeholder="Username or Email"
         placeholderTextColor="#7f7f7f"
+        value={username}
+        onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         placeholderTextColor="#7f7f7f"
         secureTextEntry
+        value={password}
+        onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
