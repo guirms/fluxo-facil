@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import personImage from '@/assets/images/person.png';
+import personImage from "@/assets/images/person.png";
 
 const userData = {
   name: "João Vitor",
@@ -29,11 +29,35 @@ const userData = {
         { name: "Freelance", amount: 250.0 },
       ],
       planning: [
-        { category: "Educação", percentage: 90, spent: 450.0 },
-        { category: "Lazer", percentage: 50, spent: 275.0 },
-        { category: "Alimentação", percentage: 80, spent: 105.5 },
+        {
+          category: "Educação",
+          percentage: 90,
+          fillColor: "#FD764C",
+          spent: 450.0,
+        },
+        {
+          category: "Lazer",
+          percentage: 50,
+          fillColor: "#FD4C4C",
+          spent: 275.0,
+        },
+        {
+          category: "Alimentação",
+          percentage: 80,
+          fillColor: "#4C88FD",
+          spent: 105.5,
+        },
       ],
-      chartData: [50, 100, 150, 200, 250, 300, 400],
+      // Adicionei dias do mês para o gráfico
+      chartData: [
+        { day: "1", expense: 50 },
+        { day: "5", expense: 100 },
+        { day: "10", expense: 150 },
+        { day: "15", expense: 200 },
+        { day: "20", expense: 250 },
+        { day: "25", expense: 300 },
+        { day: "30", expense: 400 },
+      ],
     },
     {
       name: "Agosto",
@@ -49,11 +73,34 @@ const userData = {
         { name: "Investimento", amount: 700.0 },
       ],
       planning: [
-        { category: "Educação", percentage: 80, spent: 400.0 },
-        { category: "Lazer", percentage: 60, spent: 300.0 },
-        { category: "Alimentação", percentage: 70, spent: 700.0 },
+        {
+          category: "Educação",
+          percentage: 80,
+          fillColor: "#FD764C",
+          spent: 400.0,
+        },
+        {
+          category: "Lazer",
+          percentage: 60,
+          fillColor: "#FD4C4C",
+          spent: 300.0,
+        },
+        {
+          category: "Alimentação",
+          percentage: 70,
+          fillColor: "#4C88FD",
+          spent: 700.0,
+        },
       ],
-      chartData: [60, 120, 180, 240, 300, 360, 420],
+      chartData: [
+        { day: "1", expense: 60 },
+        { day: "5", expense: 120 },
+        { day: "10", expense: 180 },
+        { day: "15", expense: 240 },
+        { day: "20", expense: 300 },
+        { day: "25", expense: 360 },
+        { day: "30", expense: 420 },
+      ],
     },
   ],
 };
@@ -76,12 +123,11 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Header */}
+
       <View style={styles.header}>
         <View style={styles.userInfo}>
-          <Image
-            source={personImage}
-            style={styles.avatar}
-          />
+          <Image source={personImage} style={styles.avatar} />
           <Text style={styles.userName}>{userData.name}</Text>
         </View>
 
@@ -112,11 +158,13 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <ScrollView style={styles.scrollContainer}>
+      {/* Reserves and income */}
+
+      <View style={styles.scrollContainer}>
         <View style={styles.cardsContainer}>
           <View style={styles.card}>
             <View style={styles.cardHeader}>
-              <AntDesign name="downcircleo" size={24} color="red" />
+              <AntDesign name="downcircleo" size={24} color="#E83F5B" />
               <Text style={styles.cardTitleLoss}>Despesas</Text>
             </View>
 
@@ -146,7 +194,7 @@ export default function HomeScreen() {
 
           <View style={styles.card}>
             <View style={styles.cardHeader}>
-              <AntDesign name="upcircleo" size={24} color="green" />
+              <AntDesign name="upcircleo" size={24} color="#12A454" />
               <Text style={styles.cardTitleIncome}>Receitas</Text>
             </View>
 
@@ -175,7 +223,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Planning Section */}
+        {/* Planning */}
         <View style={styles.planningSection}>
           <Text style={styles.sectionTitle}>Planejamento</Text>
           {currentMonth.planning.map((item, index) => (
@@ -183,7 +231,13 @@ export default function HomeScreen() {
               <Text style={styles.planningCategory}>{item.category}</Text>
               <View style={styles.progressBar}>
                 <View
-                  style={[styles.progress, { width: `${item.percentage}%` }]}
+                  style={[
+                    styles.progress,
+                    {
+                      width: `${item.percentage}%`,
+                      backgroundColor: `${item.fillColor}`,
+                    },
+                  ]}
                 />
               </View>
               <Text style={styles.planningText}>
@@ -198,10 +252,10 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Despesas</Text>
           <LineChart
             data={{
-              labels: ["0", "2", "4", "6", "8", "10", "12", "14"],
+              labels: currentMonth.chartData.map((data) => data.day), // Usando dias do mês como rótulos
               datasets: [
                 {
-                  data: currentMonth.chartData,
+                  data: currentMonth.chartData.map((data) => data.expense), // Valores das despesas
                   color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
                 },
               ],
@@ -220,7 +274,7 @@ export default function HomeScreen() {
             style={{ marginVertical: 10, borderRadius: 16 }}
           />
         </View>
-      </ScrollView>
+      </View>
 
       {/* Floating Button */}
       <TouchableOpacity style={styles.floatingButton}>
@@ -232,8 +286,8 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#1c1f26" },
-  header: { 
-    backgroundColor: "#2E3C3D", 
+  header: {
+    backgroundColor: "#2E3C3D",
     padding: 10,
     marginBottom: 20,
     borderBottomLeftRadius: 15,
@@ -242,7 +296,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   userInfo: { flexDirection: "row", alignItems: "center" },
   avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 10 },
@@ -254,8 +308,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  arrow: { color: "#fff", fontSize: 24, marginHorizontal: 15 },
-  month: { color: "#fff", fontSize: 20, fontWeight: "bold" },
+  arrow: { color: "#fff", fontSize: 18, marginHorizontal: 25 },
+  month: { color: "#fff", fontSize: 25 },
   balanceInfo: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -273,7 +327,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
-    gap: 10
+    gap: 10,
   },
   card: {
     flex: 1,
@@ -287,7 +341,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   cardTitleLoss: {
-    color: "red",
+    color: "#E83F5B",
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 5,
@@ -301,19 +355,19 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   cardTitleIncome: {
-    color: "green",
+    color: "#12A454",
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 5,
   },
   totalExpense: {
-    color: "red",
+    color: "#E83F5B",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
   },
   totalIncome: {
-    color: "green",
+    color: "#12A454",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
@@ -324,22 +378,22 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   expenseBullet: {
-    color: "red",
+    color: "#E83F5B",
     fontSize: 14,
     marginRight: 5,
   },
   expenseValue: {
-    color: "red",
+    color: "#E83F5B",
     fontSize: 12,
     marginRight: 10,
   },
   incomeValue: {
-    color: "green",
+    color: "#12A454",
     fontSize: 12,
     marginRight: 10,
   },
   incomeBullet: {
-    color: "green",
+    color: "#12A454",
     fontSize: 14,
     marginRight: 5,
   },
@@ -355,18 +409,30 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontStyle: "italic",
   },
-  planningSection: { marginVertical: 20 },
+  planningSection: {
+    backgroundColor: "#253031",
+    borderRadius: 15,
+    padding: 10,
+  },
   planningItem: { marginBottom: 10 },
   planningCategory: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   progressBar: {
-    height: 10,
+    height: 18,
     backgroundColor: "#333",
-    borderRadius: 5,
+    borderRadius: 10,
     overflow: "hidden",
   },
-  progress: { height: "100%", backgroundColor: "#1e90ff" },
+  progress: {
+    height: "100%",
+    borderTopEndRadius: 10,
+    borderBottomEndRadius: 10,
+  },
   planningText: { color: "#aaa", fontSize: 14 },
-  chartSection: { marginVertical: 20 },
+  chartSection: {
+    marginVertical: 20,
+    backgroundColor: "#253031",
+    borderRadius: 10
+  },
   sectionTitle: {
     color: "#fff",
     fontSize: 18,
