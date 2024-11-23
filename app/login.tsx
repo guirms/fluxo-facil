@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -7,15 +7,15 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-} from "react-native";
-import { useRouter } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../infra/firebase";
-import logoImage from "@/assets/images/logo.png";
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../infra/firebase';
+import logoImage from '@/assets/images/logo.png';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -26,10 +26,10 @@ export default function LoginScreen() {
         password
       );
       const user = userCredential.user;
-      Alert.alert("Login Bem-sucedido", `Bem-vindo, ${user.email}!`);
-      router.push("/home");
+      Alert.alert('Login Bem-sucedido', `Bem-vindo, ${user.email}!`);
+      router.push('/home');
     } catch (error) {
-      Alert.alert("Erro de Login", "Usuário ou senha incorretos.");
+      Alert.alert('Erro de Login', 'Usuário ou senha incorretos.');
     }
   };
 
@@ -45,15 +45,15 @@ export default function LoginScreen() {
 
         <TextInput
           style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#7f7f7f"
+          placeholder='Email'
+          placeholderTextColor='#7f7f7f'
           value={email}
           onChangeText={setEmail}
         />
         <TextInput
           style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#7f7f7f"
+          placeholder='Senha'
+          placeholderTextColor='#7f7f7f'
           secureTextEntry
           value={password}
           onChangeText={setPassword}
@@ -64,11 +64,11 @@ export default function LoginScreen() {
         </TouchableOpacity>
 
         <Text style={styles.forgotText}>
-          Esqueceu sua senha?{" "}
+          Esqueceu sua senha?{' '}
           <Text
             style={styles.clickableText}
             onPress={() =>
-              Alert.alert("Recuperação de senha", "Funcionalidade em breve!")
+              Alert.alert('Recuperação de senha', 'Funcionalidade em breve!')
             }
           >
             Clique aqui
@@ -82,8 +82,8 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#171A21",
-    alignItems: "center",
+    backgroundColor: '#171A21',
+    alignItems: 'center',
     padding: 20,
   },
   logo: {
@@ -93,51 +93,51 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   logoDescription: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 21,
     marginBottom: 60,
-    width: "70%",
-    textAlign: "center",
+    width: '70%',
+    textAlign: 'center',
   },
   loginContainer: {
-    justifyContent: "center",
-    width: "100%"
+    justifyContent: 'center',
+    width: '100%'
   },
   title: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   input: {
-    width: "100%",
+    width: '100%',
     height: 50,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 5,
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#1e90ff",
+    backgroundColor: '#1e90ff',
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 5,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 20,
   },
   buttonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   forgotText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 14,
-    textAlign: "center",
+    textAlign: 'center',
   },
   clickableText: {
-    color: "#1e90ff",
-    fontWeight: "bold",
+    color: '#1e90ff',
+    fontWeight: 'bold',
   },
 });
