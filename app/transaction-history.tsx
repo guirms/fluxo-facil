@@ -14,9 +14,8 @@ import HomeService from "@/services/home-service";
 import { router, useLocalSearchParams } from "expo-router";
 
 export default function TransactionsScreen() {
-  const searchParam = useLocalSearchParams();
-
-  const activeTab = searchParam.activeTab;
+  const item = useLocalSearchParams();
+  const [activeTab, setActiveTab] = useState(item.activeTab);
   const [modalVisible, setModalVisible] = useState(false);
 
   const currentMonth =
