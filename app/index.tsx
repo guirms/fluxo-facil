@@ -1,3 +1,3 @@
-import TransactionsScreen from "./transaction_history";
+import transaction_history from "./transaction_history";
 
-export default TransactionsScreen;
+export default transaction_history;

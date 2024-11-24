@@ -7,6 +7,7 @@ const financeDataResponse: FinanceDataResponse = {
         {
             value: EMonth.june,
             expenses: [
+                { description: 'Rancho', date: '2024-05-01 00:00:00', category: ECategory.food, amount: 532.5 },
                 { description: 'Mercado', date: '2024-06-01 00:00:00', category: ECategory.food, amount: 543.5 },
                 { description: 'Faculdade', date: '2024-06-01 00:00:00', category: ECategory.education, amount: 200.0 },
                 { description: 'Festa', date: '2024-06-04 00:00:00', category: ECategory.leisure, amount: 100.0 },

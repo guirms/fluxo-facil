@@ -7,22 +7,24 @@ import {
   TextInput,
   Modal,
 } from "react-native";
+import { ECategory } from "@/data-types/enums";
+import financeDataResponse from "@/mock/mockData";
+import { EMonth } from "@/data-types/enums";
 
-export default function add_transaction() {
-  const [modalVisible, setModalVisible] = useState(true);
+export default function AddTransaction({
+  modalVisible,
+  setModalVisible,
+  setUpdatedData,
+}: any) {
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
+  const [category, setCategory] = useState<ECategory | null>(null);
+  const [type, setType] = useState<"expenses" | "incomes" | null>(null);
   const [value, setValue] = useState("0.00");
 
   const formatValue = (rawValue: string) => {
-    // Remove tudo que não for número
     const cleanValue = rawValue.replace(/\D/g, "");
-
-    // Converte o valor em uma string no formato de moeda
     const integerPart = cleanValue.slice(0, -2) || "0";
     const decimalPart = cleanValue.slice(-2).padStart(2, "0");
-
     return `${parseInt(integerPart, 10)}.${decimalPart}`;
   };
 
@@ -39,7 +41,40 @@ export default function add_transaction() {
   };
 
   const handleSave = () => {
-    console.log({ type, description, category, value });
+    if (!description || !category || !type || parseFloat(value) <= 0) {
+      alert("Preencha todos os campos!");
+      return;
+    }
+
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+
+    const newTransaction = {
+      description,
+      date: today.toISOString(),
+      category,
+      amount: parseFloat(value),
+    };
+
+    const monthIndex = financeDataResponse.months.findIndex(
+      (month) =>
+        month.value === Object.values(EMonth)[currentMonth] &&
+        new Date(month.expenses[0]?.date || month.incomes[0]?.date || "").getFullYear() === currentYear
+    );
+
+    if (monthIndex !== -1) {
+      financeDataResponse.months[monthIndex][type].push(newTransaction);
+    } else {
+      financeDataResponse.months.push({
+        value: Object.values(EMonth)[currentMonth],
+        expenses: type === "expenses" ? [newTransaction] : [],
+        incomes: type === "incomes" ? [newTransaction] : [],
+        planning: [],
+      });
+    }
+
+    setUpdatedData([...financeDataResponse.months]);
     setModalVisible(false);
   };
 
@@ -58,17 +93,29 @@ export default function add_transaction() {
           {/* Tipo */}
           <TouchableOpacity
             style={styles.input}
-            onPress={() => console.log("Abrir dropdown de tipos")}
+            onPress={() =>
+              setType(type === "expenses" ? "incomes" : "expenses")
+            }
           >
-            <Text style={styles.inputText}>{type || "Selecione o tipo"}</Text>
+            <Text style={styles.inputText}>
+              {type === "expenses" ? "Despesas" : type === "incomes" ? "Receitas" : "Selecione o tipo"}
+            </Text>
           </TouchableOpacity>
 
           {/* Categoria */}
           <TouchableOpacity
             style={styles.input}
-            onPress={() => console.log("Abrir dropdown de categorias")}
+            onPress={() =>
+              setCategory(
+                category === ECategory.education
+                  ? ECategory.leisure
+                  : ECategory.education
+              )
+            }
           >
-            <Text style={styles.inputText}>{category || "Selecione a categoria"}</Text>
+            <Text style={styles.inputText}>
+              {category || "Selecione a categoria"}
+            </Text>
           </TouchableOpacity>
 
           {/* Descrição */}
