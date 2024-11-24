@@ -8,15 +8,21 @@ import {
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import financeDataResponse from "@/mock/mockData";
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import AddTransaction from "./add-transaction";
 import HomeService from "@/services/home-service";
+import { router } from "expo-router";
 
 export default function TransactionsScreen() {
   const [activeTab, setActiveTab] = useState("expenses");
   const [modalVisible, setModalVisible] = useState(false);
 
-  const currentMonth = HomeService.financeData.months[HomeService.currentMonthIndex];
+  const currentMonth =
+    HomeService.financeData.months[HomeService.currentMonthIndex];
+
+  const goToHomeScreen = (): void => {
+    router.push("/home");
+  };
 
   const formatCurrency = (value: number) => {
     return `R$ ${value.toFixed(2).replace(".", ",")}`;
@@ -31,9 +37,7 @@ export default function TransactionsScreen() {
   }
 
   const transactions =
-    activeTab === "expenses"
-      ? currentMonth.expenses
-      : currentMonth.incomes;
+    activeTab === "expenses" ? currentMonth.expenses : currentMonth.incomes;
 
   const groupedTransactions = transactions.reduce<
     Record<number, typeof transactions>
@@ -61,12 +65,12 @@ export default function TransactionsScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => goToHomeScreen()}>
           <FontAwesome name="arrow-left" size={20} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Julho</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text style={styles.addButton}>+</Text>
+        <Text style={styles.headerTitle}>{currentMonth.name}</Text>
+        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.addButton}>
+          <FontAwesome6 name="plus" size={18} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -94,10 +98,8 @@ export default function TransactionsScreen() {
         keyExtractor={(item, index) => `${item.name}-${index}`}
         renderItem={({ item }) => (
           <View style={styles.transactionItem}>
-            <Text style={styles.transactionCategory}>{item.category }</Text>
-            <Text style={styles.transactionDescription}>
-              {item.name}
-            </Text>
+            <Text style={styles.transactionCategory}>{item.category}</Text>
+            <Text style={styles.transactionDescription}>{item.name}</Text>
             <Text
               style={[
                 styles.transactionAmount,
@@ -141,9 +143,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   addButton: {
-    color: "#fff",
-    fontSize: 28,
-    fontWeight: "bold",
+    backgroundColor: '#27415699',
+    width: 40,
+    height: 40,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontWeight: 'bold',
   },
   tabs: {
     flexDirection: "row",

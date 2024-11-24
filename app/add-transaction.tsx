@@ -45,12 +45,12 @@ export default function AddTransaction({
     const amount = parseFloat(value);
 
     if (!description || !category || !amount || !type) {
-      Alert.alert('Preencha todos os campos!');
+      Alert.alert('Aviso', 'Preencha todos os campos!');
       return;
     }
 
     if (isNaN(amount) || amount <= 0) {
-      Alert.alert('Valor inválido!');
+      Alert.alert('Aviso', 'Valor inválido!');
       return;
     }
 

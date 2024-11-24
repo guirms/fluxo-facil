@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -21,21 +22,31 @@ HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
 
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(HomeService.financeData.months[HomeService.currentMonthIndex]);
   const router = useRouter();
-
-  const currentMonth = HomeService.financeData.months[HomeService.currentMonthIndex];
+  
+  
   const screenWidth = Dimensions.get('window').width;
 
   const handleMonthChange = (direction: 'prev' | 'next') => {
-    if (direction === 'prev' && HomeService.currentMonthIndex > 0) {
+    if (direction === 'prev') {
+      if (HomeService.currentMonthIndex === 0) {
+        Alert.alert('Erro', 'Não há dados no mes anterior');
+        return;
+      }
+
       HomeService.currentMonthIndex -= 1;
-    } else if (
-      direction === 'next' &&
-      HomeService.currentMonthIndex < HomeService.financeData.months.length - 1
-    ) {
+    } else if (direction === 'next') {
+      if (HomeService.currentMonthIndex === HomeService.financeData.months.length - 1) {
+        Alert.alert('Erro', 'Não há dados no mes posterior');
+        return;
+      }
+
       HomeService.currentMonthIndex += 1;
     }
-  };  
+
+    setCurrentMonth(HomeService.financeData.months[HomeService.currentMonthIndex]);
+  };
 
   const goToTransactionScreen = (activeTab: 'incomes' | 'expenses'): void => {
     router.push('/transaction-history');
