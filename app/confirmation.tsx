@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {
   View,
   Text,
@@ -15,9 +16,19 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
+    text: {
+        color: '#fff',
+        fontSize: 16,
+        marginTop: 10,
+      },
   });
 
-<View style={styles.container}>
-  
-</View>
+export default function ConfirmationScreen() {
+    return (
+      <View style={styles.container}>
+        <FontAwesome name="check-circle" size={96} color="green" />
+        <Text style={styles.text}>Adicionado</Text>
+      </View>
+    );
+  }
   

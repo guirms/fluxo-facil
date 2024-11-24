@@ -1,3 +1,3 @@
-import add_transaction from "./add_transaction";
+import ConfirmationScreen from "./confirmation";
 
-export default add_transaction;
+export default ConfirmationScreen;
