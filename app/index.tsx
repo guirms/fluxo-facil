@@ -1,3 +1,3 @@
-import transaction_history from "./transaction_history";
+import HomeScreen from "./home";
 
-export default transaction_history;
+export default HomeScreen;

@@ -3,10 +3,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Modal,
+  StyleSheet
 } from "react-native";
 
 const styles = StyleSheet.create({

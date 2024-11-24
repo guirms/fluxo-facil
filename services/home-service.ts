@@ -4,7 +4,9 @@ class HomeService {
     static getFinanceDataDto(financeDataResponse: FinanceDataResponse): FinanceDataDto {         
         const monthsDto: MonthDto[] = [];
 
-        for (let month of financeDataResponse.months) {  
+        const monthsWithTransactions = financeDataResponse.months.filter(month => month.expenses.length > 0 || month.incomes.length > 0);
+
+        for (let month of monthsWithTransactions) {  
             const balance = this.getBalance(month.expenses, month.incomes);
             const predictedBalance = this.getPredictedBalance(balance, month.expenses, month.incomes);
 
@@ -62,31 +64,54 @@ class HomeService {
     }
 
     static getPredictedBalance(balance: number, expenses: Transaction[], incomes: Transaction[]) {
-        const totalIncomes = incomes
-            .filter(e => new Date(e.date).getTime() > Date.now())
-            .reduce((acc, income) => acc + (income.amount || 0), 0);
+        let totalIncomes = 0;    
+        let totalExpenses = 0;    
+
+        if (incomes.length > 0) {
+            totalIncomes = incomes
+                .filter(e => new Date(e.date).getTime() > Date.now())
+                .reduce((acc, income) => acc + (income.amount || 0), 0);
+        }
         
-        const totalExpenses = expenses
+        if (expenses.length > 0) {
+            totalExpenses = expenses
             .filter(e => new Date(e.date).getTime() > Date.now())
             .reduce((acc, expense) => acc + (expense.amount || 0), 0);
-    
+        }
+
         return balance + totalIncomes - totalExpenses;
     }
 
     private static getBalance(expenses: Transaction[], incomes: Transaction[]): number {
-        const totalIncomes = incomes
-            .filter(e => new Date(e.date).getTime() <= Date.now())
-            .reduce((acc, income) => acc + (income.amount || 0), 0);
+        let totalIncomes = 0;    
+        let totalExpenses = 0;    
+
+        if (incomes.length > 0) {
+            totalIncomes = incomes
+                .filter(e => new Date(e.date).getTime() <= Date.now())
+                .reduce((acc, income) => acc + (income.amount || 0), 0);
+        }
         
-        const totalExpenses = expenses
-            .filter(e => new Date(e.date).getTime() <= Date.now())
-            .reduce((acc, expense) => acc + (expense.amount || 0), 0);
-    
+        if (expenses.length > 0) {
+            totalExpenses = expenses
+                .filter(e => new Date(e.date).getTime() <= Date.now())
+                .reduce((acc, expense) => acc + (expense.amount || 0), 0);
+        }
+
         return totalIncomes - totalExpenses;
     }
     
 
     private static getChartDto(expenses: Transaction[]): ChartDataDto[] {
+        if (expenses.length === 0) {
+            return [
+                {
+                    day: '00/00',
+                    expense: 0
+                }
+            ];
+        }
+
         const firstExpenseData = expenses[0].date;
         const lastExpenseData = expenses[expenses.length - 1].date;
 

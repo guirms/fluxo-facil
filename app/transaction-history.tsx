@@ -4,13 +4,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SectionList,
-  Modal,
+  SectionList
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import financeDataResponse from "@/mock/mockData";
-import AddTransaction from "./add_transaction"; // Certifique-se de importar corretamente
+import AddTransaction from "./add-transaction"; // Certifique-se de importar corretamente
 
 export default function TransactionsScreen() {
   const [activeTab, setActiveTab] = useState("expenses");
