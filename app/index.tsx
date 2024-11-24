@@ -1,3 +1,3 @@
-import add_transaction from "./add_transaction";
+import LoginScreen from './login';
 
-export default add_transaction;
+export default LoginScreen;
