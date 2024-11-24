@@ -1,3 +1,3 @@
-import ConfirmationScreen from "./confirmation";
+import TransactionsScreen from "./transaction_history";
 
-export default ConfirmationScreen;
+export default TransactionsScreen;

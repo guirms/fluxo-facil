@@ -15,7 +15,9 @@ const financeDataResponse: FinanceDataResponse = {
                 { description: 'Cinema', date: '2024-06-16 00:00:00', category: ECategory.leisure, amount: 50.0 },
                 { description: 'Transporte', date: '2024-06-23 00:00:00', category: ECategory.leisure, amount: 30.0 },
                 { description: 'Internet', date: '2024-06-28 00:00:00', category: ECategory.education, amount: 100.0 },
-                { description: 'Aluguel', date: '2024-06-30 00:00:00', category: ECategory.food, amount: 1200.0 }
+                { description: 'Aluguel', date: '2024-06-30 00:00:00', category: ECategory.food, amount: 1200.0 },
+                { description: 'Almoço de comemoração', date: '2024-06-30 00:00:00', category: ECategory.food, amount: 307.0 }
+
 
             ],
             incomes: [
