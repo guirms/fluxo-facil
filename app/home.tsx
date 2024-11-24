@@ -11,8 +11,11 @@ import {
 import { LineChart } from 'react-native-chart-kit';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import personImage from '@/assets/images/person.png';
-import financeData from '@/mock/mockData';
+import financeDataResponse from '@/mock/mockData';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import HomeService from '@/services/home-service';
+
+const financeData = HomeService.getFinanceDataDto(financeDataResponse);
 
 export default function HomeScreen() {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
@@ -150,7 +153,7 @@ export default function HomeScreen() {
                 />
               </View>
               <Text style={styles.planningText}>
-                R$ {item.spent.toFixed(2)} ({item.percentage}%)
+                R$ {item.spent.toFixed(2)} ({item.percentage.toFixed(2)}%)
               </Text>
             </View>
           ))}
@@ -342,7 +345,7 @@ const styles = StyleSheet.create({
   },
   planningText: { color: '#aaa', fontSize: 14 },
   chartSection: {
-    marginVertical: 20,
+    marginTop: 20,
     padding: 10,
     backgroundColor: '#253031',
     borderRadius: 10,

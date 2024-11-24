@@ -1,34 +1,36 @@
-interface Transaction {
-  description: string;
-  date: string;
-  category?: ECategory;
+interface TransactionDto {
+  name: string;
   amount: number;
 }
 
-interface Planning {
-  category: ECategory;
-  plannedSpending: number;
+interface IncomeDto {
+  name: string;
+  amount: number;
+}
+
+interface PlanningDto {
+  category: string;
   percentage: number;
   fillColor: string;
   spent: number;
 }
 
-interface ChartData {
+interface ChartDataDto {
   day: string;
   expense: number;
 }
 
-interface Month {
-  value: EMonth;
+interface MonthDto {
+  name: string;
   balance: number;
   predictedBalance: number;
-  expenses: Transaction[];
-  incomes: Transaction[];
-  planning: Planning[];
-  chartData: ChartData[];
+  expenses: TransactionDto[];
+  incomes: TransactionDto[];
+  planning: PlanningDto[];
+  chartData: ChartDataDto[];
 }
 
-interface FinanceData {
+interface FinanceDataDto {
   name: string;
-  months: Month[];
+  months: MonthDto[];
 }
