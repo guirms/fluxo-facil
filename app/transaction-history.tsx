@@ -11,10 +11,12 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import AddTransaction from "./add-transaction";
 import HomeService from "@/services/home-service";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 export default function TransactionsScreen() {
-  const [activeTab, setActiveTab] = useState("expenses");
+  const searchParam = useLocalSearchParams();
+
+  const activeTab = searchParam.activeTab;
   const [modalVisible, setModalVisible] = useState(false);
 
   const currentMonth =

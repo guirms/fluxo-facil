@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,49 +8,58 @@ import {
   Dimensions,
   ScrollView,
   Alert,
-} from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import personImage from '@/assets/images/person.png';
-import financeDataResponse from '@/mock/mockData';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import HomeService from '@/services/home-service';
+} from "react-native";
+import { LineChart } from "react-native-chart-kit";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import personImage from "@/assets/images/person.png";
+import financeDataResponse from "@/mock/mockData";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import HomeService from "@/services/home-service";
 import AddTransaction from "./add-transaction";
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
 
 HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
 
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(HomeService.financeData.months[HomeService.currentMonthIndex]);
+  const [currentMonth, setCurrentMonth] = useState(
+    HomeService.financeData.months[HomeService.currentMonthIndex]
+  );
   const router = useRouter();
-  
-  
-  const screenWidth = Dimensions.get('window').width;
 
-  const handleMonthChange = (direction: 'prev' | 'next') => {
-    if (direction === 'prev') {
+  const screenWidth = Dimensions.get("window").width;
+
+  const handleMonthChange = (direction: "prev" | "next") => {
+    if (direction === "prev") {
       if (HomeService.currentMonthIndex === 0) {
-        Alert.alert('Erro', 'Não há dados no mes anterior');
+        Alert.alert("Erro", "Não há dados no mes anterior");
         return;
       }
 
       HomeService.currentMonthIndex -= 1;
-    } else if (direction === 'next') {
-      if (HomeService.currentMonthIndex === HomeService.financeData.months.length - 1) {
-        Alert.alert('Erro', 'Não há dados no mes posterior');
+    } else if (direction === "next") {
+      if (
+        HomeService.currentMonthIndex ===
+        HomeService.financeData.months.length - 1
+      ) {
+        Alert.alert("Erro", "Não há dados no mes posterior");
         return;
       }
 
       HomeService.currentMonthIndex += 1;
     }
 
-    setCurrentMonth(HomeService.financeData.months[HomeService.currentMonthIndex]);
+    setCurrentMonth(
+      HomeService.financeData.months[HomeService.currentMonthIndex]
+    );
   };
 
-  const goToTransactionScreen = (activeTab: 'incomes' | 'expenses'): void => {
-    router.push('/transaction-history');
-  }
+  const goToTransactionScreen = (activeTab: "incomes" | "expenses"): void => {
+    router.push({
+      pathname: "/transaction-history",
+      params: { activeTab },
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -64,12 +73,12 @@ export default function HomeScreen() {
 
         <View style={styles.balanceSection}>
           <View style={styles.monthSelector}>
-            <TouchableOpacity onPress={() => handleMonthChange('prev')}>
-              <Text style={styles.arrow}>{'<'}</Text>
+            <TouchableOpacity onPress={() => handleMonthChange("prev")}>
+              <Text style={styles.arrow}>{"<"}</Text>
             </TouchableOpacity>
             <Text style={styles.month}>{currentMonth.name}</Text>
-            <TouchableOpacity onPress={() => handleMonthChange('next')}>
-              <Text style={styles.arrow}>{'>'}</Text>
+            <TouchableOpacity onPress={() => handleMonthChange("next")}>
+              <Text style={styles.arrow}>{">"}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.balanceInfo}>
@@ -93,14 +102,17 @@ export default function HomeScreen() {
 
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.cardsContainer}>
-          <TouchableOpacity style={styles.card} onPress={() => goToTransactionScreen('expenses')}>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => goToTransactionScreen("expenses")}
+          >
             <View style={styles.cardHeader}>
-              <AntDesign name='downcircleo' size={24} color='#E83F5B' />
+              <AntDesign name="downcircleo" size={24} color="#E83F5B" />
               <Text style={styles.cardTitleLoss}>Despesas</Text>
             </View>
 
             <Text style={styles.totalExpense}>
-              R${' '}
+              R${" "}
               {currentMonth.expenses
                 .reduce((acc, expense) => acc + expense.amount, 0)
                 .toFixed(2)}
@@ -123,14 +135,17 @@ export default function HomeScreen() {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card} onPress={() => goToTransactionScreen('expenses')}>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => goToTransactionScreen("incomes")}
+          >
             <View style={styles.cardHeader}>
-              <AntDesign name='upcircleo' size={24} color='#12A454' />
+              <AntDesign name="upcircleo" size={24} color="#12A454" />
               <Text style={styles.cardTitleIncome}>Receitas</Text>
             </View>
 
             <Text style={styles.totalIncome}>
-              R${' '}
+              R${" "}
               {currentMonth.incomes
                 .reduce((acc, income) => acc + income.amount, 0)
                 .toFixed(2)}
@@ -193,10 +208,10 @@ export default function HomeScreen() {
             }}
             width={screenWidth - 30}
             height={200}
-            yAxisLabel='R$ '
+            yAxisLabel="R$ "
             chartConfig={{
-              backgroundGradientFrom: '#253031',
-              backgroundGradientTo: '#253031',
+              backgroundGradientFrom: "#253031",
+              backgroundGradientTo: "#253031",
               decimalPlaces: 1,
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -212,12 +227,15 @@ export default function HomeScreen() {
       </ScrollView>
 
       {/* Floating Button */}
-      <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.floatingButton}>
-        <FontAwesome6 name='plus' size={24} color='white' />
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        style={styles.floatingButton}
+      >
+        <FontAwesome6 name="plus" size={24} color="white" />
       </TouchableOpacity>
 
-    {/* Modal de Adicionar Transação */}
-    <AddTransaction
+      {/* Modal de Adicionar Transação */}
+      <AddTransaction
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
@@ -226,171 +244,171 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#1c1f26' },
+  container: { flex: 1, backgroundColor: "#1c1f26" },
   header: {
-    backgroundColor: '#2E3C3D',
+    backgroundColor: "#2E3C3D",
     padding: 10,
     marginBottom: 20,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
   },
-  userInfo: { flexDirection: 'row', alignItems: 'center' },
+  userInfo: { flexDirection: "row", alignItems: "center" },
   avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 10 },
-  userName: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-  icon: { color: '#fff', fontSize: 20, marginLeft: 15 },
-  balanceSection: { alignItems: 'center' },
+  userName: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  icon: { color: "#fff", fontSize: 20, marginLeft: 15 },
+  balanceSection: { alignItems: "center" },
   monthSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 10,
   },
-  arrow: { color: '#fff', fontSize: 18, marginHorizontal: 25 },
-  month: { color: '#fff', fontSize: 25 },
+  arrow: { color: "#fff", fontSize: 18, marginHorizontal: 25 },
+  month: { color: "#fff", fontSize: 25 },
   balanceInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
   },
-  balanceItem: { alignItems: 'center', flex: 1 },
-  balance: { color: '#fff', fontSize: 24, fontWeight: 'bold' },
-  balanceLabel: { color: '#aaa', fontSize: 14 },
+  balanceItem: { alignItems: "center", flex: 1 },
+  balance: { color: "#fff", fontSize: 24, fontWeight: "bold" },
+  balanceLabel: { color: "#aaa", fontSize: 14 },
   scrollContainer: {
     flex: 1,
     paddingHorizontal: 10,
     paddingBottom: 20,
   },
   cardsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 20,
     gap: 10,
   },
   card: {
     flex: 1,
-    backgroundColor: '#253031',
+    backgroundColor: "#253031",
     borderRadius: 10,
     padding: 10,
   },
   cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 5,
   },
   cardTitleLoss: {
-    color: '#E83F5B',
+    color: "#E83F5B",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 5,
   },
   cardItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    color: '#aaa',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    color: "#aaa",
     fontSize: 14,
     marginBottom: 2,
   },
   cardTitleIncome: {
-    color: '#12A454',
+    color: "#12A454",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 5,
   },
   totalExpense: {
-    color: '#E83F5B',
+    color: "#E83F5B",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   totalIncome: {
-    color: '#12A454',
+    color: "#12A454",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   cardRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 5,
   },
   expenseBullet: {
-    color: '#E83F5B',
+    color: "#E83F5B",
     fontSize: 14,
     marginRight: 5,
   },
   expenseValue: {
-    color: '#E83F5B',
+    color: "#E83F5B",
     fontSize: 12,
     marginRight: 10,
   },
   incomeValue: {
-    color: '#12A454',
+    color: "#12A454",
     fontSize: 12,
     marginRight: 10,
   },
   incomeBullet: {
-    color: '#12A454',
+    color: "#12A454",
     fontSize: 14,
     marginRight: 5,
   },
   cardDescription: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
     flexShrink: 1,
   },
   moreButton: {
-    color: '#aaa',
+    color: "#aaa",
     fontSize: 14,
     marginTop: 10,
-    textAlign: 'right',
-    fontStyle: 'italic',
+    textAlign: "right",
+    fontStyle: "italic",
   },
   planningSection: {
-    backgroundColor: '#253031',
+    backgroundColor: "#253031",
     borderRadius: 15,
     padding: 10,
   },
   planningItem: { marginBottom: 10 },
-  planningCategory: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  planningCategory: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   progressBar: {
     height: 18,
-    backgroundColor: '#333',
+    backgroundColor: "#333",
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   progress: {
-    height: '100%',
+    height: "100%",
     borderTopEndRadius: 10,
     borderBottomEndRadius: 10,
   },
-  planningText: { color: '#aaa', fontSize: 14 },
+  planningText: { color: "#aaa", fontSize: 14 },
   chartSection: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: '#253031',
+    backgroundColor: "#253031",
     borderRadius: 10,
   },
   sectionTitle: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   floatingButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: '#27415699',
+    backgroundColor: "#27415699",
     width: 60,
     height: 60,
     borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontWeight: 'bold',
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: "bold",
   },
 });
