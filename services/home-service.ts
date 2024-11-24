@@ -2,6 +2,7 @@ import { FinanceDataResponse, Transaction } from "@/data-types/responses";
 
 class HomeService {
     static financeData: FinanceDataDto;
+    static currentMonthIndex = 0;
 
     static getFinanceDataDto(financeDataResponse: FinanceDataResponse): FinanceDataDto {         
         const monthsDto: MonthDto[] = [];
@@ -18,6 +19,8 @@ class HomeService {
             {
                 expensesDto.push({
                     name: expense.description,
+                    date: expense.date,
+                    category: expense.category ?? 'Sem categoria',
                     amount: expense.amount
                 });
             }
@@ -28,6 +31,8 @@ class HomeService {
             {
                 incomesDto.push({
                     name: income.description,
+                    date: income.date,
+                    category: income.category ?? 'Sem categoria',
                     amount: income.amount
                 });
             }

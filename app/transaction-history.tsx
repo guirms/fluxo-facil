@@ -4,25 +4,25 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SectionList
+  SectionList,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import financeDataResponse from "@/mock/mockData";
 import AddTransaction from "./add-transaction";
+import HomeService from "@/services/home-service";
 
 export default function TransactionsScreen() {
   const [activeTab, setActiveTab] = useState("expenses");
-  const [updatedData] = useState([...financeDataResponse.months]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const currentMonthData = updatedData[0];
+  const currentMonth = HomeService.financeData.months[HomeService.currentMonthIndex];
 
   const formatCurrency = (value: number) => {
     return `R$ ${value.toFixed(2).replace(".", ",")}`;
   };
 
-  if (!currentMonthData) {
+  if (!currentMonth) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Nenhum dado disponível.</Text>
@@ -32,10 +32,12 @@ export default function TransactionsScreen() {
 
   const transactions =
     activeTab === "expenses"
-      ? currentMonthData.expenses
-      : currentMonthData.incomes;
+      ? currentMonth.expenses
+      : currentMonth.incomes;
 
-  const groupedTransactions = transactions.reduce<Record<number, typeof transactions>>((groups, transaction) => {
+  const groupedTransactions = transactions.reduce<
+    Record<number, typeof transactions>
+  >((groups, transaction) => {
     const date = new Date(transaction.date);
     const day = date.getDate();
 
@@ -74,14 +76,14 @@ export default function TransactionsScreen() {
           style={[styles.tab, activeTab === "expenses" && styles.activeTab]}
           onPress={() => setActiveTab("expenses")}
         >
-          <AntDesign name="downcircle" size={24} color="red" />
+          <AntDesign name="downcircleo" size={24} color="#E83F5B" />
           <Text style={styles.tabText}>Despesas</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === "incomes" && styles.activeTab]}
           onPress={() => setActiveTab("incomes")}
         >
-          <AntDesign name="upcircle" size={24} color="green" />
+          <AntDesign name="upcircleo" size={24} color="#12A454" />
           <Text style={styles.tabText}>Receitas</Text>
         </TouchableOpacity>
       </View>
@@ -89,12 +91,12 @@ export default function TransactionsScreen() {
       {/* Transactions List */}
       <SectionList
         sections={sectionData}
-        keyExtractor={(item, index) => `${item.description}-${index}`}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
         renderItem={({ item }) => (
           <View style={styles.transactionItem}>
-            <Text style={styles.transactionCategory}>{item.category}</Text>
+            <Text style={styles.transactionCategory}>{item.category }</Text>
             <Text style={styles.transactionDescription}>
-              {item.description}
+              {item.name}
             </Text>
             <Text
               style={[
@@ -199,6 +201,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#fff",
-    fontSize: 18
-  }
+    fontSize: 18,
+  },
 });

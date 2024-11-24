@@ -15,26 +15,31 @@ import financeDataResponse from '@/mock/mockData';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import HomeService from '@/services/home-service';
 import AddTransaction from "./add-transaction";
+import { useRouter } from 'expo-router';
 
 HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
 
 export default function HomeScreen() {
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
 
-  const currentMonth = HomeService.financeData.months[currentMonthIndex];
+  const currentMonth = HomeService.financeData.months[HomeService.currentMonthIndex];
   const screenWidth = Dimensions.get('window').width;
 
   const handleMonthChange = (direction: 'prev' | 'next') => {
-    if (direction === 'prev' && currentMonthIndex > 0) {
-      setCurrentMonthIndex(currentMonthIndex - 1);
+    if (direction === 'prev' && HomeService.currentMonthIndex > 0) {
+      HomeService.currentMonthIndex -= 1;
     } else if (
       direction === 'next' &&
-      currentMonthIndex < HomeService.financeData.months.length - 1
+      HomeService.currentMonthIndex < HomeService.financeData.months.length - 1
     ) {
-      setCurrentMonthIndex(currentMonthIndex + 1);
+      HomeService.currentMonthIndex += 1;
     }
   };  
+
+  const goToTransactionScreen = (activeTab: 'incomes' | 'expenses'): void => {
+    router.push('/transaction-history');
+  }
 
   return (
     <View style={styles.container}>
@@ -77,7 +82,7 @@ export default function HomeScreen() {
 
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.cardsContainer}>
-          <View style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => goToTransactionScreen('expenses')}>
             <View style={styles.cardHeader}>
               <AntDesign name='downcircleo' size={24} color='#E83F5B' />
               <Text style={styles.cardTitleLoss}>Despesas</Text>
@@ -105,9 +110,9 @@ export default function HomeScreen() {
                 <Text style={styles.moreButton}>mais...</Text>
               </TouchableOpacity>
             )}
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => goToTransactionScreen('expenses')}>
             <View style={styles.cardHeader}>
               <AntDesign name='upcircleo' size={24} color='#12A454' />
               <Text style={styles.cardTitleIncome}>Receitas</Text>
@@ -135,7 +140,7 @@ export default function HomeScreen() {
                 <Text style={styles.moreButton}>mais...</Text>
               </TouchableOpacity>
             )}
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Planning */}

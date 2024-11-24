@@ -1,5 +1,5 @@
-import { EMonth, ECategory } from "@/data-types/enums";
-import { FinanceDataResponse } from "@/data-types/responses";
+import { EMonth, ECategory } from '@/data-types/enums';
+import { FinanceDataResponse } from '@/data-types/responses';
 
 const financeDataResponse: FinanceDataResponse = {
     name: 'João Vitor',
@@ -76,19 +76,19 @@ const financeDataResponse: FinanceDataResponse = {
             planning: [
                 {
                     category: ECategory.education,
-                    plannedSpending: 660,
+                    plannedSpending: 960,
                     fillColor: '#FD764C',
                     spent: 652.1,
                 },
                 {
                     category: ECategory.leisure,
-                    plannedSpending: 300,
+                    plannedSpending: 600,
                     fillColor: '#FD4C4C',
                     spent: 66.66,
                 },
                 {
                     category: ECategory.food,
-                    plannedSpending: 1200,
+                    plannedSpending: 1400,
                     fillColor: '#4C88FD',
                     spent: 1146.83,
                 }
@@ -115,19 +115,19 @@ const financeDataResponse: FinanceDataResponse = {
             planning: [
                 {
                     category: ECategory.education,
-                    plannedSpending: 660,
+                    plannedSpending: 960,
                     fillColor: '#FD764C',
                     spent: 652.1,
                 },
                 {
                     category: ECategory.leisure,
-                    plannedSpending: 300,
+                    plannedSpending: 600,
                     fillColor: '#FD4C4C',
                     spent: 66.66,
                 },
                 {
                     category: ECategory.food,
-                    plannedSpending: 1200,
+                    plannedSpending: 1400,
                     fillColor: '#4C88FD',
                     spent: 1146.83,
                 }

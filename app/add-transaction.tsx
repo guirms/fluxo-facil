@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,36 +7,36 @@ import {
   TextInput,
   Modal,
   Alert,
-} from "react-native";
-import { ECategory } from "@/data-types/enums";
-import financeDataResponse from "@/mock/mockData";
-import { EMonth } from "@/data-types/enums";
-import HomeService from "@/services/home-service";
+} from 'react-native';
+import { ECategory } from '@/data-types/enums';
+import financeDataResponse from '@/mock/mockData';
+import { EMonth } from '@/data-types/enums';
+import HomeService from '@/services/home-service';
 
 export default function AddTransaction({
   modalVisible,
   setModalVisible
 }: any) {
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [category, setCategory] = useState<ECategory | null>(null);
-  const [type, setType] = useState<"expenses" | "incomes" | null>(null);
-  const [value, setValue] = useState("0.00");
+  const [type, setType] = useState<'expenses' | 'incomes' | null>(null);
+  const [value, setValue] = useState('0.00');
 
   const formatValue = (rawValue: string) => {
-    const cleanValue = rawValue.replace(/\D/g, "");
-    const integerPart = cleanValue.slice(0, -2) || "0";
-    const decimalPart = cleanValue.slice(-2).padStart(2, "0");
+    const cleanValue = rawValue.replace(/\D/g, '');
+    const integerPart = cleanValue.slice(0, -2) || '0';
+    const decimalPart = cleanValue.slice(-2).padStart(2, '0');
     return `${parseInt(integerPart, 10)}.${decimalPart}`;
   };
 
   const handleKeyPress = (key: string) => {
-    if (key === "C") {
-      setValue("0.00");
-    } else if (key === "<") {
-      const cleanValue = value.replace(".", "").slice(0, -1);
+    if (key === 'C') {
+      setValue('0.00');
+    } else if (key === '<') {
+      const cleanValue = value.replace('.', '').slice(0, -1);
       setValue(formatValue(cleanValue));
     } else if (!isNaN(Number(key))) {
-      const cleanValue = value.replace(".", "") + key;
+      const cleanValue = value.replace('.', '') + key;
       setValue(formatValue(cleanValue));
     }
   };
@@ -45,18 +45,18 @@ export default function AddTransaction({
     const amount = parseFloat(value);
 
     if (!description || !category || !amount || !type) {
-      Alert.alert("Preencha todos os campos!");
+      Alert.alert('Preencha todos os campos!');
       return;
     }
 
     if (isNaN(amount) || amount <= 0) {
-      Alert.alert("Valor inválido!");
+      Alert.alert('Valor inválido!');
       return;
     }
 
     const today = new Date();
 
-    const date = today.toISOString().split("T")[0] + 'T00:00:00.000Z';
+    const date = today.toISOString().split('T')[0] + 'T00:00:00.000Z';
 
     const newTransaction = {
       description,
@@ -77,7 +77,7 @@ export default function AddTransaction({
   };
 
   return (
-    <Modal visible={modalVisible} animationType="slide" transparent>
+    <Modal visible={modalVisible} animationType='slide' transparent>
       <View style={styles.modalContainer}>
         <View style={styles.content}>
           <TouchableOpacity
@@ -92,15 +92,15 @@ export default function AddTransaction({
           <TouchableOpacity
             style={styles.input}
             onPress={() =>
-              setType(type === "expenses" ? "incomes" : "expenses")
+              setType(type === 'expenses' ? 'incomes' : 'expenses')
             }
           >
             <Text style={styles.inputText}>
-              {type === "expenses"
-                ? "Despesas"
-                : type === "incomes"
-                ? "Receitas"
-                : "Selecione o tipo"}
+              {type === 'expenses'
+                ? 'Despesas'
+                : type === 'incomes'
+                ? 'Receitas'
+                : 'Selecione o tipo'}
             </Text>
           </TouchableOpacity>
 
@@ -118,15 +118,15 @@ export default function AddTransaction({
             }
           >
             <Text style={styles.inputText}>
-              {category || "Selecione a categoria"}
+              {category || 'Selecione a categoria'}
             </Text>
           </TouchableOpacity>
 
           {/* Descrição */}
           <TextInput
             style={styles.input}
-            placeholder="Digite a descrição"
-            placeholderTextColor="#aaa"
+            placeholder='Digite a descrição'
+            placeholderTextColor='#aaa'
             value={description}
             onChangeText={setDescription}
           />
@@ -136,7 +136,7 @@ export default function AddTransaction({
 
           {/* Teclado Customizado */}
           <View style={styles.keyboard}>
-            {["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "<", "C"].map(
+            {['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '<', 'C'].map(
               (key) => (
                 <TouchableOpacity
                   key={key}
@@ -162,82 +162,82 @@ export default function AddTransaction({
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.8)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.8)',
   },
   content: {
-    backgroundColor: "#1c1f26",
+    backgroundColor: '#1c1f26',
     padding: 20,
     borderRadius: 15,
-    width: "80%",
-    alignItems: "center",
+    width: '80%',
+    alignItems: 'center',
   },
   closeButton: {
-    position: "absolute",
+    position: 'absolute',
     top: 15,
     right: 15,
   },
   closeText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   title: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   input: {
-    width: "100%",
+    width: '100%',
     height: 45,
-    backgroundColor: "#333",
+    backgroundColor: '#333',
     borderRadius: 7,
     marginBottom: 15,
     paddingHorizontal: 10,
-    justifyContent: "center",
-    color: "#fff", // Texto branco no input
+    justifyContent: 'center',
+    color: '#fff', // Texto branco no input
     fontSize: 16,
   },
   inputText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
   },
   valueText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 15,
   },
   keyboard: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    width: "100%",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    width: '100%',
     marginTop: 20,
   },
   keyButton: {
-    width: "30%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 10,
   },
   keyText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 36,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   saveButton: {
-    backgroundColor: "#1e90ff",
+    backgroundColor: '#1e90ff',
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 5,
     marginTop: 20,
   },
   saveText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

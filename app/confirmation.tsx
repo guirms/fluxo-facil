@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {
   View,
   Text,
   StyleSheet
-} from "react-native";
+} from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 export default function ConfirmationScreen() {
     return (
       <View style={styles.container}>
-        <FontAwesome name="check-circle" size={96} color="green" />
+        <FontAwesome name='check-circle' size={96} color='green' />
         <Text style={styles.text}>Adicionado</Text>
       </View>
     );

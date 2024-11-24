@@ -1,5 +1,7 @@
 interface TransactionDto {
   name: string;
+  date: string;
+  category: string;
   amount: number;
 }
 
