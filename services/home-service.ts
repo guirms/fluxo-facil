@@ -1,6 +1,8 @@
 import { FinanceDataResponse, Transaction } from "@/data-types/responses";
 
 class HomeService {
+    static financeData: FinanceDataDto;
+
     static getFinanceDataDto(financeDataResponse: FinanceDataResponse): FinanceDataDto {         
         const monthsDto: MonthDto[] = [];
 

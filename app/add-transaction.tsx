@@ -6,15 +6,16 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
+  Alert,
 } from "react-native";
 import { ECategory } from "@/data-types/enums";
 import financeDataResponse from "@/mock/mockData";
 import { EMonth } from "@/data-types/enums";
+import HomeService from "@/services/home-service";
 
 export default function AddTransaction({
   modalVisible,
-  setModalVisible,
-  setUpdatedData,
+  setModalVisible
 }: any) {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<ECategory | null>(null);
@@ -41,40 +42,37 @@ export default function AddTransaction({
   };
 
   const handleSave = () => {
-    if (!description || !category || !type || parseFloat(value) <= 0) {
-      alert("Preencha todos os campos!");
+    const amount = parseFloat(value);
+
+    if (!description || !category || !amount || !type) {
+      Alert.alert("Preencha todos os campos!");
+      return;
+    }
+
+    if (isNaN(amount) || amount <= 0) {
+      Alert.alert("Valor inválido!");
       return;
     }
 
     const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
+
+    const date = today.toISOString().split("T")[0] + 'T00:00:00.000Z';
 
     const newTransaction = {
       description,
-      date: today.toISOString(),
+      date: date,
       category,
-      amount: parseFloat(value),
+      amount: amount,
     };
 
     const monthIndex = financeDataResponse.months.findIndex(
       (month) =>
-        month.value === Object.values(EMonth)[currentMonth] &&
-        new Date(month.expenses[0]?.date || month.incomes[0]?.date || "").getFullYear() === currentYear
+        month.value === Object.values(EMonth)[today.getMonth()]
     );
 
-    if (monthIndex !== -1) {
-      financeDataResponse.months[monthIndex][type].push(newTransaction);
-    } else {
-      financeDataResponse.months.push({
-        value: Object.values(EMonth)[currentMonth],
-        expenses: type === "expenses" ? [newTransaction] : [],
-        incomes: type === "incomes" ? [newTransaction] : [],
-        planning: [],
-      });
-    }
-
-    setUpdatedData([...financeDataResponse.months]);
+    financeDataResponse.months[monthIndex][type].push(newTransaction);
+    
+    HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
     setModalVisible(false);
   };
 
@@ -98,7 +96,11 @@ export default function AddTransaction({
             }
           >
             <Text style={styles.inputText}>
-              {type === "expenses" ? "Despesas" : type === "incomes" ? "Receitas" : "Selecione o tipo"}
+              {type === "expenses"
+                ? "Despesas"
+                : type === "incomes"
+                ? "Receitas"
+                : "Selecione o tipo"}
             </Text>
           </TouchableOpacity>
 
@@ -109,6 +111,8 @@ export default function AddTransaction({
               setCategory(
                 category === ECategory.education
                   ? ECategory.leisure
+                  : category === ECategory.leisure
+                  ? ECategory.food
                   : ECategory.education
               )
             }

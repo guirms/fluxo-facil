@@ -14,12 +14,15 @@ import personImage from '@/assets/images/person.png';
 import financeDataResponse from '@/mock/mockData';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import HomeService from '@/services/home-service';
+import AddTransaction from "./add-transaction";
 
-const financeData = HomeService.getFinanceDataDto(financeDataResponse);
+HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
 
 export default function HomeScreen() {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
-  const currentMonth = financeData.months[currentMonthIndex];
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const currentMonth = HomeService.financeData.months[currentMonthIndex];
   const screenWidth = Dimensions.get('window').width;
 
   const handleMonthChange = (direction: 'prev' | 'next') => {
@@ -27,7 +30,7 @@ export default function HomeScreen() {
       setCurrentMonthIndex(currentMonthIndex - 1);
     } else if (
       direction === 'next' &&
-      currentMonthIndex < financeData.months.length - 1
+      currentMonthIndex < HomeService.financeData.months.length - 1
     ) {
       setCurrentMonthIndex(currentMonthIndex + 1);
     }
@@ -40,7 +43,7 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Image source={personImage} style={styles.avatar} />
-          <Text style={styles.userName}>{financeData.name}</Text>
+          <Text style={styles.userName}>{HomeService.financeData.name}</Text>
         </View>
 
         <View style={styles.balanceSection}>
@@ -193,9 +196,15 @@ export default function HomeScreen() {
       </ScrollView>
 
       {/* Floating Button */}
-      <TouchableOpacity style={styles.floatingButton}>
+      <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.floatingButton}>
         <FontAwesome6 name='plus' size={24} color='white' />
       </TouchableOpacity>
+
+    {/* Modal de Adicionar Transação */}
+    <AddTransaction
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </View>
   );
 }

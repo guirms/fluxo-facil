@@ -9,14 +9,14 @@ import {
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import financeDataResponse from "@/mock/mockData";
-import AddTransaction from "./add-transaction"; // Certifique-se de importar corretamente
+import AddTransaction from "./add-transaction";
 
 export default function TransactionsScreen() {
   const [activeTab, setActiveTab] = useState("expenses");
-  const [updatedData, setUpdatedData] = useState([...financeDataResponse.months]);
+  const [updatedData] = useState([...financeDataResponse.months]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const currentMonthData = updatedData[0]; // Use apenas o mês inicial
+  const currentMonthData = updatedData[0];
 
   const formatCurrency = (value: number) => {
     return `R$ ${value.toFixed(2).replace(".", ",")}`;
@@ -115,7 +115,6 @@ export default function TransactionsScreen() {
       <AddTransaction
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        setUpdatedData={setUpdatedData}
       />
     </View>
   );
