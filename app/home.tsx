@@ -27,11 +27,23 @@ export default function HomeScreen() {
   const [currentMonth, setCurrentMonth] = useState(
     HomeService.financeData.months[HomeService.currentMonthIndex]
   );
+  const handleTransactionSaved = (newTransaction: any) => {
+    const transactionType = newTransaction.category ? "expenses" : "incomes";
+
+    // Atualizar a lista de transações do mês atual
+    const updatedTransactions = [
+      ...currentMonth[transactionType],
+      newTransaction,
+    ];
+
+    setCurrentMonth({
+      ...currentMonth,
+      [transactionType]: updatedTransactions,
+    });
+  };
   const [isHovered, setIsHovered] = useState(false); // Controle de hover
   const router = useRouter();
-
   const screenWidth = Dimensions.get("window").width;
-
   const handleMonthChange = (direction: "prev" | "next") => {
     if (direction === "prev") {
       if (HomeService.currentMonthIndex === 0) {
@@ -56,14 +68,12 @@ export default function HomeScreen() {
       HomeService.financeData.months[HomeService.currentMonthIndex]
     );
   };
-
   const goToTransactionScreen = (activeTab: "incomes" | "expenses"): void => {
     router.push({
       pathname: "/transaction-history",
       params: { activeTab },
     });
   };
-
   const goToEconomicIndicators = (): void => {
     router.push("/economic-indicator"); // Redireciona para a tela de indicadores econômicos
   };
@@ -261,6 +271,7 @@ export default function HomeScreen() {
       <AddTransaction
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        onTransactionSaved={handleTransactionSaved}
       />
     </View>
   );
@@ -424,7 +435,7 @@ const styles = StyleSheet.create({
   },
   indicatorsButton: {
     position: "absolute",
-    bottom: 90, // Acima do botão flutuante
+    bottom: 90,
     right: 20,
     backgroundColor: "#007ACC",
     paddingVertical: 10,
@@ -457,7 +468,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoButton: {
-    backgroundColor: "#007ACC",
+    backgroundColor: "#27415699",
     padding: 10,
     borderRadius: 50,
     justifyContent: "center",
