@@ -1,4 +1,5 @@
 interface TransactionDto {
+  description: any;
   name: string;
   date: string;
   category: string;

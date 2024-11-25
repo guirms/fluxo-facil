@@ -18,6 +18,7 @@ class HomeService {
             for (let expense of month.expenses)
             {
                 expensesDto.push({
+                    description: expense.description,
                     name: expense.description,
                     date: expense.date,
                     category: expense.category ?? 'Sem categoria',
@@ -30,6 +31,7 @@ class HomeService {
             for (let income of month.incomes)
             {
                 incomesDto.push({
+                    description: income.description,
                     name: income.description,
                     date: income.date,
                     category: income.category ?? 'Sem categoria',
@@ -176,6 +178,7 @@ class HomeService {
         return `${day}/${month}`;
     }
 }
+
 export default HomeService;
 
 // interface TransactionDto {

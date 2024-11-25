@@ -1,25 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   SectionList,
+  Alert,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AddTransaction from "./add-transaction";
 import HomeService from "@/services/home-service";
 import { router, useLocalSearchParams } from "expo-router";
 
 export default function TransactionsScreen() {
   const item = useLocalSearchParams();
-  const [activeTab, setActiveTab] = useState(item.activeTab);
+  const [activeTab, setActiveTab] = useState(item.activeTab || "expenses");
   const [modalVisible, setModalVisible] = useState(false);
+  const [transactionsData, setTransactionsData] = useState(
+    HomeService.financeData.months[HomeService.currentMonthIndex]
+  );
 
-  const currentMonth =
-    HomeService.financeData.months[HomeService.currentMonthIndex];
+  useEffect(() => {
+    setTransactionsData(
+      HomeService.financeData.months[HomeService.currentMonthIndex]
+    );
+  }, [activeTab]);
+
+  const handleAddTransaction = (newTransaction: any) => {
+    const transactionType =
+      newTransaction.category === undefined ? "incomes" : "expenses";
+
+    // Atualiza o estado local adicionando a nova transação
+    const updatedTransactions = [
+      ...transactionsData[transactionType],
+      newTransaction,
+    ];
+
+    setTransactionsData({
+      ...transactionsData,
+      [transactionType]: updatedTransactions,
+    });
+
+    // Atualiza o estado global no HomeService
+    const monthIndex = HomeService.financeData.months.findIndex(
+      (month) => month.name === transactionsData.name
+    );
+    HomeService.financeData.months[monthIndex][transactionType] =
+      updatedTransactions;
+  };
+
+  const handleDeleteTransaction = (transaction: any) => {
+    const transactionType = activeTab === "expenses" ? "expenses" : "incomes";
+
+    // Remove a transação do tipo correto
+    const updatedTransactions = transactionsData[transactionType].filter(
+      (t) =>
+        t.description !== transaction.description || t.date !== transaction.date
+    );
+
+    // Atualiza os dados do estado local
+    setTransactionsData({
+      ...transactionsData,
+      [transactionType]: updatedTransactions,
+    });
+
+    // Atualiza os dados no HomeService
+    const monthIndex = HomeService.financeData.months.findIndex(
+      (month) => month.name === transactionsData.name
+    );
+    HomeService.financeData.months[monthIndex][transactionType] =
+      updatedTransactions;
+
+    Alert.alert("Sucesso", "Transação deletada com sucesso!");
+  };
 
   const goToHomeScreen = (): void => {
     router.push("/home");
@@ -29,7 +84,7 @@ export default function TransactionsScreen() {
     return `R$ ${value.toFixed(2).replace(".", ",")}`;
   };
 
-  if (!currentMonth) {
+  if (!transactionsData) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Nenhum dado disponível.</Text>
@@ -38,7 +93,9 @@ export default function TransactionsScreen() {
   }
 
   const transactions =
-    activeTab === "expenses" ? currentMonth.expenses : currentMonth.incomes;
+    activeTab === "expenses"
+      ? transactionsData.expenses || []
+      : transactionsData.incomes || [];
 
   const groupedTransactions = transactions.reduce<
     Record<number, typeof transactions>
@@ -69,8 +126,11 @@ export default function TransactionsScreen() {
         <TouchableOpacity onPress={() => goToHomeScreen()}>
           <FontAwesome name="arrow-left" size={20} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{currentMonth.name}</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.addButton}>
+        <Text style={styles.headerTitle}>{transactionsData.name}</Text>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={styles.addButton}
+        >
           <FontAwesome6 name="plus" size={18} color="white" />
         </TouchableOpacity>
       </View>
@@ -96,11 +156,13 @@ export default function TransactionsScreen() {
       {/* Transactions List */}
       <SectionList
         sections={sectionData}
-        keyExtractor={(item, index) => `${item.name}-${index}`}
+        keyExtractor={(item, index) => `${item.description}-${index}`}
         renderItem={({ item }) => (
           <View style={styles.transactionItem}>
             <Text style={styles.transactionCategory}>{item.category}</Text>
-            <Text style={styles.transactionDescription}>{item.name}</Text>
+            <Text style={styles.transactionDescription}>
+              {item.description}
+            </Text>
             <Text
               style={[
                 styles.transactionAmount,
@@ -109,6 +171,13 @@ export default function TransactionsScreen() {
             >
               {formatCurrency(item.amount)}
             </Text>
+            {/* Botão de deletar */}
+            <TouchableOpacity
+              onPress={() => handleDeleteTransaction(item)}
+              style={styles.deleteButton}
+            >
+              <AntDesign name="delete" size={20} color="red" />
+            </TouchableOpacity>
           </View>
         )}
         renderSectionHeader={({ section: { title } }) => (
@@ -120,6 +189,7 @@ export default function TransactionsScreen() {
       <AddTransaction
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        onTransactionSaved={(newTransaction: any) => handleAddTransaction(newTransaction)}
       />
     </View>
   );
@@ -144,13 +214,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   addButton: {
-    backgroundColor: '#27415699',
+    backgroundColor: "#27415699",
     width: 40,
     height: 40,
     borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontWeight: 'bold',
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: "bold",
   },
   tabs: {
     flexDirection: "row",
@@ -209,5 +279,10 @@ const styles = StyleSheet.create({
   errorText: {
     color: "#fff",
     fontSize: 18,
+  },
+  deleteButton: {
+    marginLeft: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

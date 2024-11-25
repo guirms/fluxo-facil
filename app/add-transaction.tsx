@@ -15,14 +15,14 @@ import HomeService from '@/services/home-service';
 
 export default function AddTransaction({
   modalVisible,
-  setModalVisible
+  setModalVisible,
+  onTransactionSaved
 }: any) {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<ECategory | null>(null);
   const [type, setType] = useState<'expenses' | 'incomes' | null>(null);
   const [value, setValue] = useState('0.00');
 
-    // Reseta os campos sempre que o modal for fechado
     useEffect(() => {
       if (!modalVisible) {
         setDescription('');
