@@ -39,15 +39,22 @@ export default function AddTransaction({
     return `${parseInt(integerPart, 10)}.${decimalPart}`;
   };
 
+  const MAX_DIGITS = 15;
+
   const handleKeyPress = (key: string) => {
-    if (key === 'C') {
-      setValue('0.00');
-    } else if (key === '<') {
-      const cleanValue = value.replace('.', '').slice(0, -1);
+    if (key === "C") {
+      setValue("0.00");
+    } else if (key === "<") {
+      const cleanValue = value.replace(".", "").slice(0, -1);
       setValue(formatValue(cleanValue));
     } else if (!isNaN(Number(key))) {
-      const cleanValue = value.replace('.', '') + key;
-      setValue(formatValue(cleanValue));
+      const cleanValue = value.replace(".", "");
+      if (cleanValue.length < MAX_DIGITS) {
+        const newValue = cleanValue + key;
+        setValue(formatValue(newValue));
+      } else {
+        Alert.alert("Aviso", "Número muito grande!");
+      }
     }
   };
 
