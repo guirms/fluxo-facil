@@ -8,6 +8,7 @@ import {
   Dimensions,
   ScrollView,
   Alert,
+  Pressable,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -17,6 +18,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import HomeService from "@/services/home-service";
 import AddTransaction from "./add-transaction";
 import { useRouter } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
 
@@ -25,6 +27,7 @@ export default function HomeScreen() {
   const [currentMonth, setCurrentMonth] = useState(
     HomeService.financeData.months[HomeService.currentMonthIndex]
   );
+  const [isHovered, setIsHovered] = useState(false); // Controle de hover
   const router = useRouter();
 
   const screenWidth = Dimensions.get("window").width;
@@ -59,6 +62,10 @@ export default function HomeScreen() {
       pathname: "/transaction-history",
       params: { activeTab },
     });
+  };
+
+  const goToEconomicIndicators = (): void => {
+    router.push("/economic-indicator"); // Redireciona para a tela de indicadores econômicos
   };
 
   return (
@@ -225,6 +232,22 @@ export default function HomeScreen() {
           />
         </View>
       </ScrollView>
+
+      {/* Botão de Indicadores Econômicos com Hover */}
+      <View style={styles.infoButtonContainer}>
+        <Pressable
+          onPress={goToEconomicIndicators}
+          onHoverIn={() => setIsHovered(true)} // Mostra a descrição ao passar o mouse
+          onHoverOut={() => setIsHovered(false)} // Esconde a descrição ao sair do mouse
+          style={styles.infoButton}
+        >
+          <FontAwesome name="info-circle" size={24} color   ="#fff" />
+        </Pressable>
+        {isHovered && (
+          <Text style={styles.infoText}>Informações Econômicas</Text>
+        )}
+      </View>
+
 
       {/* Floating Button */}
       <TouchableOpacity
@@ -399,16 +422,54 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
   },
+  indicatorsButton: {
+    position: "absolute",
+    bottom: 90, // Acima do botão flutuante
+    right: 20,
+    backgroundColor: "#007ACC",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  indicatorsButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   floatingButton: {
     position: "absolute",
     bottom: 20,
     right: 20,
     backgroundColor: "#27415699",
-    width: 60,
-    height: 60,
+    width: 45,
+    height: 45,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     fontWeight: "bold",
+  },
+  infoButtonContainer: {
+    position: "absolute",
+    bottom: 90, // Acima do botão flutuante
+    right: 20,
+    alignItems: "center",
+  },
+  infoButton: {
+    backgroundColor: "#007ACC",
+    padding: 10,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  infoText: {
+    marginTop: 5,
+    backgroundColor: "#333",
+    color: "#fff",
+    padding: 5,
+    borderRadius: 5,
+    fontSize: 12,
+    textAlign: "center",
   },
 });

@@ -35,7 +35,7 @@ export default function TransactionsScreen() {
   }, [modalVisible]);
 
   const handleAddTransaction = (newTransaction: any) => {
-    refreshData(); // Força o refresh dos dados
+    refreshData();
   };
 
   const handleDeleteTransaction = (transaction: any) => {
