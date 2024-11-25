@@ -22,33 +22,20 @@ export default function TransactionsScreen() {
     HomeService.financeData.months[HomeService.currentMonthIndex]
   );
 
-  useEffect(() => {
+  const refreshData = () => {
     setTransactionsData(
       HomeService.financeData.months[HomeService.currentMonthIndex]
     );
-  }, [activeTab]);
+  };
+
+  useEffect(() => {
+    if (!modalVisible) {
+      refreshData();
+    }
+  }, [modalVisible]);
 
   const handleAddTransaction = (newTransaction: any) => {
-    const transactionType =
-      newTransaction.category === undefined ? "incomes" : "expenses";
-
-    // Atualiza o estado local adicionando a nova transação
-    const updatedTransactions = [
-      ...transactionsData[transactionType],
-      newTransaction,
-    ];
-
-    setTransactionsData({
-      ...transactionsData,
-      [transactionType]: updatedTransactions,
-    });
-
-    // Atualiza o estado global no HomeService
-    const monthIndex = HomeService.financeData.months.findIndex(
-      (month) => month.name === transactionsData.name
-    );
-    HomeService.financeData.months[monthIndex][transactionType] =
-      updatedTransactions;
+    refreshData(); // Força o refresh dos dados
   };
 
   const handleDeleteTransaction = (transaction: any) => {

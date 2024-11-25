@@ -16,21 +16,21 @@ import HomeService from '@/services/home-service';
 export default function AddTransaction({
   modalVisible,
   setModalVisible,
-  onTransactionSaved
+  onTransactionSaved,
 }: any) {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<ECategory | null>(null);
   const [type, setType] = useState<'expenses' | 'incomes' | null>(null);
   const [value, setValue] = useState('0.00');
 
-    useEffect(() => {
-      if (!modalVisible) {
-        setDescription('');
-        setCategory(null);
-        setType(null);
-        setValue('0.00');
-      }
-    }, [modalVisible]);
+  useEffect(() => {
+    if (!modalVisible) {
+      setDescription('');
+      setCategory(null);
+      setType(null);
+      setValue('0.00');
+    }
+  }, [modalVisible]);
 
   const formatValue = (rawValue: string) => {
     const cleanValue = rawValue.replace(/\D/g, '');
@@ -42,18 +42,18 @@ export default function AddTransaction({
   const MAX_DIGITS = 15;
 
   const handleKeyPress = (key: string) => {
-    if (key === "C") {
-      setValue("0.00");
-    } else if (key === "<") {
-      const cleanValue = value.replace(".", "").slice(0, -1);
+    if (key === 'C') {
+      setValue('0.00');
+    } else if (key === '<') {
+      const cleanValue = value.replace('.', '').slice(0, -1);
       setValue(formatValue(cleanValue));
     } else if (!isNaN(Number(key))) {
-      const cleanValue = value.replace(".", "");
+      const cleanValue = value.replace('.', '');
       if (cleanValue.length < MAX_DIGITS) {
         const newValue = cleanValue + key;
         setValue(formatValue(newValue));
       } else {
-        Alert.alert("Aviso", "Número muito grande!");
+        Alert.alert('Aviso', 'Número muito grande!');
       }
     }
   };
@@ -72,34 +72,35 @@ export default function AddTransaction({
     }
   
     const today = new Date();
-  
     const date = today.toISOString().split('T')[0] + 'T00:00:00.000Z';
   
     const newTransaction = {
       description,
-      date: date,
-      category: type === 'incomes' ? undefined : category as ECategory, 
-      amount: amount,
+      date, // Data atual formatada
+      category: type === 'incomes' ? undefined : category as ECategory,
+      amount,
     };
   
-    // Encontra o índice do mês atual
+    // Atualiza os dados globalmente
     const monthIndex = financeDataResponse.months.findIndex(
-      (month) =>
-        month.value === Object.values(EMonth)[today.getMonth()]
+      (month) => month.value === Object.values(EMonth)[today.getMonth()]
     );
   
-    // Adiciona a transação no tipo correto (despesas ou receitas)
     financeDataResponse.months[monthIndex][type].push(newTransaction);
-  
-    // Atualiza os dados na HomeService
     HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
   
+    // Notifica a tela principal
+    if (onTransactionSaved) {
+      onTransactionSaved(newTransaction);
+    }
+  
+    // Fecha o modal
     setModalVisible(false);
   };
   
 
   return (
-    <Modal visible={modalVisible} animationType='slide' transparent>
+    <Modal visible={modalVisible} animationType="slide" transparent>
       <View style={styles.modalContainer}>
         <View style={styles.content}>
           <TouchableOpacity
@@ -113,9 +114,7 @@ export default function AddTransaction({
           {/* Tipo */}
           <TouchableOpacity
             style={styles.input}
-            onPress={() =>
-              setType(type === 'expenses' ? 'incomes' : 'expenses')
-            }
+            onPress={() => setType(type === 'expenses' ? 'incomes' : 'expenses')}
           >
             <Text style={styles.inputText}>
               {type === 'expenses'
@@ -147,8 +146,8 @@ export default function AddTransaction({
           {/* Descrição */}
           <TextInput
             style={styles.input}
-            placeholder='Digite a descrição'
-            placeholderTextColor='#aaa'
+            placeholder="Digite a descrição"
+            placeholderTextColor="#aaa"
             value={description}
             onChangeText={setDescription}
           />
@@ -180,6 +179,7 @@ export default function AddTransaction({
     </Modal>
   );
 }
+
 
 const styles = StyleSheet.create({
   modalContainer: {
