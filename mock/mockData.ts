@@ -74,7 +74,7 @@ const financeDataResponse: FinanceDataResponse = {
                 { description: 'Transporte', date: '2024-11-23 00:00:00', category: ECategory.leisure, amount: 30.0 },
             ],
             incomes: [
-                { description: 'Salário', date: '2024-11-05', amount: 3000 },
+                { description: 'Salário', date: '2024-11-05', category: ECategory.leisure, amount: 3000 },
                 { description: 'Aluguel', date: '2024-11-10', amount: 600 },
             ],
             planning: [

@@ -60,38 +60,43 @@ export default function AddTransaction({
 
   const handleSave = () => {
     const amount = parseFloat(value);
-
-    if (!description || !category || !amount || !type) {
-      Alert.alert('Aviso', 'Preencha todos os campos!');
+  
+    if (!description || (type === 'expenses' && !category) || !amount || !type) {
+      Alert.alert('Aviso', 'Preencha todos os campos obrigatórios!');
       return;
     }
-
+  
     if (isNaN(amount) || amount <= 0) {
       Alert.alert('Aviso', 'Valor inválido!');
       return;
     }
-
+  
     const today = new Date();
-
+  
     const date = today.toISOString().split('T')[0] + 'T00:00:00.000Z';
-
+  
     const newTransaction = {
       description,
       date: date,
-      category,
+      category: type === 'incomes' ? undefined : category as ECategory, 
       amount: amount,
     };
-
+  
+    // Encontra o índice do mês atual
     const monthIndex = financeDataResponse.months.findIndex(
       (month) =>
         month.value === Object.values(EMonth)[today.getMonth()]
     );
-
+  
+    // Adiciona a transação no tipo correto (despesas ou receitas)
     financeDataResponse.months[monthIndex][type].push(newTransaction);
-    
+  
+    // Atualiza os dados na HomeService
     HomeService.financeData = HomeService.getFinanceDataDto(financeDataResponse);
+  
     setModalVisible(false);
   };
+  
 
   return (
     <Modal visible={modalVisible} animationType='slide' transparent>
