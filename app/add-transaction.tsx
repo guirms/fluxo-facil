@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -21,6 +21,16 @@ export default function AddTransaction({
   const [category, setCategory] = useState<ECategory | null>(null);
   const [type, setType] = useState<'expenses' | 'incomes' | null>(null);
   const [value, setValue] = useState('0.00');
+
+    // Reseta os campos sempre que o modal for fechado
+    useEffect(() => {
+      if (!modalVisible) {
+        setDescription('');
+        setCategory(null);
+        setType(null);
+        setValue('0.00');
+      }
+    }, [modalVisible]);
 
   const formatValue = (rawValue: string) => {
     const cleanValue = rawValue.replace(/\D/g, '');
